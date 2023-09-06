@@ -1,0 +1,11 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  namespace: new
+  name: pod-chaos-demo
+spec:
+  action: pod-kill
+  selector:
+    labelSelectors:
+      app.kubernetes.io/instance: chaos-deploy-test
+  mode: one
