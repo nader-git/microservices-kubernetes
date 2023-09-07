@@ -2,7 +2,7 @@
 FROM nginx:alpine
 
 # Copy the contents of the local 'frontend' directory to the Nginx document root
-COPY ./ /usr/share/nginx/html
+COPY /app/index.html /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80

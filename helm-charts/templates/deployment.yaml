@@ -23,3 +23,10 @@ spec:
           image: "{{ .Values.image.repository }}"
           ports:
             - containerPort: {{ .Values.service.port }}
+          volumeMounts:
+            - name: frontend-files
+              mountPath: /app
+      volumes:
+        - name: frontend-files
+          hostPath:
+            path: /files
