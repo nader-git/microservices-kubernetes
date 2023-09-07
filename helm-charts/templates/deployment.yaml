@@ -23,6 +23,13 @@ spec:
           image: "{{ .Values.image.repository }}"
           ports:
             - containerPort: {{ .Values.service.port }}
+          resources:
+            requests:
+              cpu: "10m" # Set an appropriate value
+              memory: "128Mi" # Set an appropriate value
+            limits:
+              cpu: "50m"
+              memory: "256Mi" 
           volumeMounts:
             - name: frontend-files
               mountPath: /app
