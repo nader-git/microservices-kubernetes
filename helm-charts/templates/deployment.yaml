@@ -27,6 +27,7 @@ spec:
           image: "{{ .Values.image.repository }}"
           ports:
             - containerPort: {{ .Values.service.port }}
+              name: http
           resources:
             requests:
               cpu: "10m" 
@@ -34,24 +35,16 @@ spec:
             limits:
               cpu: "50m"
               memory: "256Mi" 
-      #     livenessProbe:
-      #       exec:
-      #         command:
-      #         - cat
-      #         - /tmp/healthy
-      #       initialDelaySeconds: 5
-      #       periodSeconds: 5
-      #     readinessProbe:
-      #       exec:
-      #         command:
-      #         - cat
-      #         - /tmp/healthy
-      #       initialDelaySeconds: 5
-      #       periodSeconds: 5
-      #     volumeMounts:
-      #       - name: frontend-files
-      #         mountPath: /app
-      # volumes:
-      #   - name: frontend-files
-      #     hostPath:
-      #       path: /files
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
