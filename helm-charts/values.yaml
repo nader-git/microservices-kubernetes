@@ -1,9 +1,9 @@
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: fastapi:v1
   pullPolicy: IfNotPresent
 
 service:
-  type: ClusterIP
+  type: NodePort
   port: 80

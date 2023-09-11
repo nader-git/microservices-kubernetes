@@ -29,29 +29,29 @@ spec:
             - containerPort: {{ .Values.service.port }}
           resources:
             requests:
-              cpu: "10m" # Set an appropriate value
-              memory: "128Mi" # Set an appropriate value
+              cpu: "10m" 
+              memory: "128Mi" 
             limits:
               cpu: "50m"
               memory: "256Mi" 
-          livenessProbe:
-            exec:
-              command:
-              - cat
-              - /tmp/healthy
-            initialDelaySeconds: 5
-            periodSeconds: 5
-          readinessProbe:
-            exec:
-              command:
-              - cat
-              - /tmp/healthy
-            initialDelaySeconds: 5
-            periodSeconds: 5
-          volumeMounts:
-            - name: frontend-files
-              mountPath: /app
-      volumes:
-        - name: frontend-files
-          hostPath:
-            path: /files
+      #     livenessProbe:
+      #       exec:
+      #         command:
+      #         - cat
+      #         - /tmp/healthy
+      #       initialDelaySeconds: 5
+      #       periodSeconds: 5
+      #     readinessProbe:
+      #       exec:
+      #         command:
+      #         - cat
+      #         - /tmp/healthy
+      #       initialDelaySeconds: 5
+      #       periodSeconds: 5
+      #     volumeMounts:
+      #       - name: frontend-files
+      #         mountPath: /app
+      # volumes:
+      #   - name: frontend-files
+      #     hostPath:
+      #       path: /files
