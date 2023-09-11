@@ -3,12 +3,14 @@ kind: Deployment
 metadata:
   name: {{ include "helm-charts.fullname" . }}
   labels:
-    {{- include "helm-charts.labels" . | nindent 4 }}
+    app.kubernetes.io/instance: first-deploy
+    app.kubernetes.io/name: helm-charts
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "helm-charts.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/instance: first-deploy
+      app.kubernetes.io/name: helm-charts
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -16,7 +18,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "helm-charts.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/instance: first-deploy
+        app.kubernetes.io/name: helm-charts
+
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -30,6 +34,20 @@ spec:
             limits:
               cpu: "50m"
               memory: "256Mi" 
+          livenessProbe:
+            exec:
+              command:
+              - cat
+              - /tmp/healthy
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+              - cat
+              - /tmp/healthy
+            initialDelaySeconds: 5
+            periodSeconds: 5
           volumeMounts:
             - name: frontend-files
               mountPath: /app

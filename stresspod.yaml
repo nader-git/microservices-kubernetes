@@ -7,7 +7,7 @@ spec:
   mode: all
   selector:
     namespaces:
-      - hello-kubernetes
+      - default  
   stressors:
     memory:
       workers: 4
