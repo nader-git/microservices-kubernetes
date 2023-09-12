@@ -1,6 +1,10 @@
-FROM ubuntu:latest
+FROM ubuntu:20.04
 
-RUN apt update && apt install -y python3 python3-pip --no-install-recommends
+# Disable Prompt During Packages Installation
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Retry apt-get update if it fails
+RUN for i in {1..5}; do apt-get update && apt-get install -y python3 python3-pip --no-install-recommends && break || sleep 15; done
 
 COPY ./docker/main.py /
 
