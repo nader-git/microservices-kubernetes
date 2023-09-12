@@ -1,10 +1,6 @@
 FROM ubuntu:latest
 
-RUN apt update && \
-    apt install -y python3 python3-pip && \
-    apt clean && \
-    rm -rf /var/lib/apt/lists/*
-
+RUN apt update && apt install -y python3 python3-pip --fix-missing --fix-broken
 
 COPY ./docker/main.py /
 
