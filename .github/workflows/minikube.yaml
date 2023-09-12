@@ -37,7 +37,8 @@ jobs:
         echo -n "verifying images:"
         docker images 
         docker run -d -p 80:80 local/example 
-        docker logs $(docker ps -aqf "ancestor=local/example")   
+        docker logs $(docker ps -aqf "ancestor=local/example")
+        docker ps -a   
         for i in {1..10}; do
             if curl localhost:80; then
                 break
