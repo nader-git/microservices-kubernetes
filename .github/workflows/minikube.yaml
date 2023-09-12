@@ -36,9 +36,14 @@ jobs:
         docker build -f ./docker/Dockerfile -t local/example .
         echo -n "verifying images:"
         docker images 
-        docker run -d -p 80:80 local/example    
-        sleep 10
-        curl localhost:80    
+        docker run -d -p 80:80 local/example 
+        docker logs $(docker ps -aqf "ancestor=local/example")   
+        for i in {1..10}; do
+            if curl localhost:80; then
+                break
+            fi
+            sleep 5
+        done
 
     # Add your deployment and test steps here.
     # e.g., helm install, kubectl apply, etc.
