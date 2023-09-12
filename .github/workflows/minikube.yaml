@@ -50,15 +50,17 @@ jobs:
       run: |
         helm install first-deploy ./helm-charts/
 
-    - name: Expose service using Minikube
-      run: |
-        minikube service first-deploy-helm-charts --url
-
     - name: Check deployment status
       run: |
         kubectl get service
         kubectl get pods
         kubectl get deployment
+        
+    - name: Expose service using Minikube
+      run: |
+        minikube service first-deploy-helm-charts --url
+
+
 
     # Add your deployment and test steps here.
     # e.g., helm install, kubectl apply, etc.
