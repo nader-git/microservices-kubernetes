@@ -29,7 +29,8 @@ jobs:
         eval $(minikube -p minikube docker-env)
         docker build -f ./docker/Dockerfile -t local/example .
         echo -n "verifying images:"
-        docker images         
+        docker images 
+        docker run -p 80:80 local/example        
 
     # Add your deployment and test steps here.
     # e.g., helm install, kubectl apply, etc.
