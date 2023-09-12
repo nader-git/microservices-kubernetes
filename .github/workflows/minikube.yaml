@@ -23,6 +23,12 @@ jobs:
       run: |
         kubectl get pods -n kube-system
 
+    - name: Install Helm
+      run: |
+        curl -LO "https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz"
+        tar -zxvf helm-v3.5.2-linux-amd64.tar.gz
+        sudo mv linux-amd64/helm /usr/local/bin/helm        
+
     - name: Build image
       run: |
         export SHELL=/bin/bash
