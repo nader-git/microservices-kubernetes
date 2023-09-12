@@ -37,6 +37,7 @@ jobs:
         echo -n "verifying images:"
         docker images 
         docker run -d -p 80:80 local/example    
+        sleep 10
         curl localhost:80    
 
     # Add your deployment and test steps here.
