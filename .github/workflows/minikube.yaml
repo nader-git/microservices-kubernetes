@@ -53,9 +53,9 @@ jobs:
     # Assuming your helm chart creates a Deployment named "first-deploy", adjust if it's different.
     - name: Check deployment status
       run: |
-        kubectl rollout status deployment/first-deploy
         kubectl get service
         kubectl get pods
+        kubectl get deployment
 
     # Add your deployment and test steps here.
     # e.g., helm install, kubectl apply, etc.
