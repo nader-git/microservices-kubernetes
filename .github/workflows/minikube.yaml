@@ -33,11 +33,11 @@ jobs:
       run: |
         export SHELL=/bin/bash
         eval $(minikube -p minikube docker-env)
-        docker build -f ./docker/Dockerfile -t local/example .
+        docker build -f ./docker/Dockerfile -t fastapi:v1 .
         echo -n "verifying images:"
         docker images 
-        docker run -d -p 80:80 local/example 
-        docker logs $(docker ps -aqf "ancestor=local/example")
+        docker run -d -p 80:80 fastapi:v1 
+        docker logs $(docker ps -aqf "ancestor=fastapi:v1")
         docker ps -a   
         for i in {1..10}; do
             if curl localhost:80; then
@@ -45,6 +45,15 @@ jobs:
             fi
             sleep 5
         done
+
+    - name: helm run
+      run: |
+        helm install first-deploy ./helm-charts/
+
+    # Assuming your helm chart creates a Deployment named "first-deploy", adjust if it's different.
+    - name: Check deployment status
+      run: |
+        kubectl rollout status deployment/first-deploy
 
     # Add your deployment and test steps here.
     # e.g., helm install, kubectl apply, etc.
