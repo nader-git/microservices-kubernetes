@@ -36,7 +36,9 @@ jobs:
         docker build -f ./docker/Dockerfile -t local/example .
         echo -n "verifying images:"
         docker images 
-        docker run -p 80:80 local/example        
+        docker run -p 80:80 local/example    
+        curl http://0.0.0.0:80
+        curl localhost:80    
 
     # Add your deployment and test steps here.
     # e.g., helm install, kubectl apply, etc.
