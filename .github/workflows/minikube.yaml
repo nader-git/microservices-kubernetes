@@ -50,7 +50,10 @@ jobs:
       run: |
         helm install first-deploy ./helm-charts/
 
-    # Assuming your helm chart creates a Deployment named "first-deploy", adjust if it's different.
+    - name: Expose service using Minikube
+      run: |
+        minikube service first-deploy-helm-charts --url
+
     - name: Check deployment status
       run: |
         kubectl get service
