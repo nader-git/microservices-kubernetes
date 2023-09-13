@@ -41,6 +41,8 @@ jobs:
     - name: Enable Ingress
       run: |
         minikube addons enable ingress
+        sleep 30
+        kubectl get pods -n ingress-nginx
 
     - name: helm run
       run: |
