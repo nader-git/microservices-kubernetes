@@ -61,7 +61,6 @@ jobs:
       run: |
         minikube service first-deploy-helm-charts --url
 
-
-
-    # Add your deployment and test steps here.
-    # e.g., helm install, kubectl apply, etc.
+    - name: sleep for service
+      run: |
+        sleep 120
