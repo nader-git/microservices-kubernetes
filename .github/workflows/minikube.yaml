@@ -49,6 +49,7 @@ jobs:
     - name: helm run
       run: |
         helm install first-deploy ./helm-charts/
+        sleep 20
 
     - name: Check deployment status
       run: |
