@@ -1,6 +1,6 @@
 name: CI with Minikube
-
-on: [push]
+on:
+  - pull_request
 
 jobs:
   build:
@@ -23,5 +23,62 @@ jobs:
       run: |
         kubectl get pods -n kube-system
 
-    # Add your deployment and test steps here.
-    # e.g., helm install, kubectl apply, etc.
+    - name: Install Helm
+      run: |
+        curl -LO "https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz"
+        tar -zxvf helm-v3.5.2-linux-amd64.tar.gz
+        sudo mv linux-amd64/helm /usr/local/bin/helm        
+
+    - name: Build image
+      run: |
+        export SHELL=/bin/bash
+        eval $(minikube -p minikube docker-env)
+        docker build -f ./docker/Dockerfile -t fastapi:v1 .
+        echo -n "verifying images:"
+        docker images 
+        docker ps -a   
+
+    - name: Enable Ingress
+      run: |
+        minikube addons enable ingress
+        sleep 30
+        kubectl get pods -n ingress-nginx
+
+    - name: helm run
+      run: |
+        helm install first-deploy ./helm-charts/
+        sleep 20
+
+    - name: Retrieve Minikube IP and test service
+      run: |
+        MINIKUBE_IP=$(minikube ip)
+        curl -H "Host: first-deploy.com" $MINIKUBE_IP
+
+
+    - name: Check deployment status
+      run: |
+        kubectl get service
+        kubectl get pods
+        kubectl get deployment
+        minikube ip
+        
+    - name: Expose service using Minikube
+      id: expose_service
+      run: |
+        SERVICE_URL=$(minikube service first-deploy-helm-charts --url)
+        echo "SERVICE_URL=$SERVICE_URL" >> $GITHUB_ENV
+
+    - name: Test the service with curl
+      run: |
+        curl $SERVICE_URL
+
+
+    - name: sleep for service
+      run: |
+        sleep 120
+
+    - name: Final Cleanup
+      if: always()
+      run: |
+        minikube stop || true
+        minikube delete || true
