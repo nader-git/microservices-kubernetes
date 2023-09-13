@@ -71,10 +71,23 @@ jobs:
       run: |
         curl $SERVICE_URL
 
-
-    - name: sleep for service
+    - name: Install Prometheus
       run: |
-        sleep 120
+        kubectl create namespace monitoring
+        helm install prometheus stable/prometheus --namespace monitoring
+
+    - name: Install Grafana
+      run: |
+        helm install grafana stable/grafana --namespace monitoring
+
+    - name: Setup Prometheus Monitoring for FastAPI
+      run: |
+        kubectl apply -f custom-values.yaml
+
+    - name: Access Grafana and Set Up Dashboards
+      run: |
+        GRAFANA_POD=$(kubectl get pods --namespace monitoring -l "app=grafana" -o jsonpath="{.items[0].metadata.name}")
+        kubectl --namespace monitoring port-forward $GRAFANA_POD 3000
 
     - name: Final Cleanup
       if: always()
