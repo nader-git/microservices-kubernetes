@@ -36,20 +36,22 @@ jobs:
         docker build -f ./docker/Dockerfile -t fastapi:v1 .
         echo -n "verifying images:"
         docker images 
-        docker run -d -p 80:80 fastapi:v1 
-        docker logs $(docker ps -aqf "ancestor=fastapi:v1")
         docker ps -a   
-        for i in {1..10}; do
-            if curl localhost:80; then
-                break
-            fi
-            sleep 5
-        done
+
+    - name: Enable Ingress
+      run: |
+        minikube addons enable ingress
 
     - name: helm run
       run: |
         helm install first-deploy ./helm-charts/
         sleep 20
+
+    - name: Retrieve Minikube IP and test service
+      run: |
+        MINIKUBE_IP=$(minikube ip)
+        curl -H "Host: first-deploy.com" $MINIKUBE_IP
+
 
     - name: Check deployment status
       run: |
