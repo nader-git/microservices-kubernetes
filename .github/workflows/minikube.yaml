@@ -59,8 +59,15 @@ jobs:
         minikube ip
         
     - name: Expose service using Minikube
+      id: expose_service
       run: |
-        minikube service first-deploy-helm-charts --url
+        SERVICE_URL=$(minikube service first-deploy-helm-charts --url)
+        echo "SERVICE_URL=$SERVICE_URL" >> $GITHUB_ENV
+
+    - name: Test the service with curl
+      run: |
+        curl $SERVICE_URL
+
 
     - name: sleep for service
       run: |
