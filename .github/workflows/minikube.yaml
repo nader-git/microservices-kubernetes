@@ -29,6 +29,12 @@ jobs:
         tar -zxvf helm-v3.5.2-linux-amd64.tar.gz
         sudo mv linux-amd64/helm /usr/local/bin/helm        
 
+    - name: Add and Update Helm Repos
+      run: |
+        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        helm repo add grafana https://grafana.github.io/helm-charts
+        helm repo update
+
     - name: Build image
       run: |
         export SHELL=/bin/bash
@@ -84,10 +90,12 @@ jobs:
       run: |
         kubectl apply -f custom-values.yaml
 
-    - name: Access Grafana and Set Up Dashboards
+    - name: Get Grafana credentials and URL
       run: |
         GRAFANA_POD=$(kubectl get pods --namespace monitoring -l "app=grafana" -o jsonpath="{.items[0].metadata.name}")
-        kubectl --namespace monitoring port-forward $GRAFANA_POD 3000
+        GRAFANA_PASSWORD=$(kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode)
+        echo "Grafana URL: http://$GRAFANA_POD:3000"
+        echo "Grafana Password: $GRAFANA_PASSWORD"
 
     - name: Final Cleanup
       if: always()
