@@ -1,0 +1,6 @@
+server:
+  extraScrapeConfigs: |
+    - job_name: 'fastapi-app'
+      static_configs:
+      - targets: ['first-deploy-helm-charts.default.svc.cluster.local:80']
+

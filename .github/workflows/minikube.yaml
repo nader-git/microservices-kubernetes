@@ -49,11 +49,16 @@ jobs:
         helm install first-deploy ./helm-charts/
         sleep 20
 
-    - name: Retrieve Minikube IP and test service
+    - name: Expose service using Ingres
       run: |
         MINIKUBE_IP=$(minikube ip)
         curl -H "Host: first-deploy.com" $MINIKUBE_IP
 
+    - name: Expose service using Minikube
+      id: expose_service
+      run: |
+        SERVICE_URL=$(minikube service first-deploy-helm-charts --url)
+        echo "SERVICE_URL=$SERVICE_URL" >> $GITHUB_ENV
 
     - name: Check deployment status
       run: |
@@ -62,12 +67,6 @@ jobs:
         kubectl get deployment
         minikube ip
         
-    - name: Expose service using Minikube
-      id: expose_service
-      run: |
-        SERVICE_URL=$(minikube service first-deploy-helm-charts --url)
-        echo "SERVICE_URL=$SERVICE_URL" >> $GITHUB_ENV
-
     - name: Test the service with curl
       run: |
         curl $SERVICE_URL

@@ -8,3 +8,5 @@ To Do List:
 7. add liveness and readiness for autoscaler and stress tests
 8. do it locally then use cicd github 
 9. get docker working with minikube change values.yaml with fastapi image also keep the mount and also change the copy in fastapi to the mount and use minikube docker env to build once then i am fine and can potentially have the endpoint working
+10. get use case but try jenkins(for use case find decent use case for fastapi then use helm to show pros of automation)
+11. inventory or summin fastapi and we can add a path which will increment each time inventory or whatever is changed. 
