@@ -74,11 +74,11 @@ jobs:
     - name: Install Prometheus
       run: |
         kubectl create namespace monitoring
-        helm install prometheus stable/prometheus --namespace monitoring
+        helm install prometheus prometheus-community/prometheus --namespace monitoring
 
     - name: Install Grafana
       run: |
-        helm install grafana stable/grafana --namespace monitoring
+        helm install grafana grafana/grafana --namespace monitoring
 
     - name: Setup Prometheus Monitoring for FastAPI
       run: |
