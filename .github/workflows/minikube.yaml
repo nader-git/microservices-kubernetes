@@ -87,7 +87,7 @@ jobs:
     - name: Install Prometheus
       run: |
 
-        helm install prometheus prometheus-community/prometheus --version 24.5.0
+        helm install prometheus prometheus-community/prometheus --version 24.1.0 --namespace monitoring
 
 
     - name: Setup Prometheus Monitoring for FastAPI
