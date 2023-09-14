@@ -83,14 +83,11 @@ jobs:
         sleep 10
         helm install grafana grafana/grafana --namespace monitoring
 
-    - name: Install Prometheus
+    - name: Install or Upgrade Prometheus
       run: |
-        helm install prometheus prometheus-community/prometheus --namespace monitoring
-
-    - name: Setup Prometheus Monitoring for FastAPI
-      run: |
-        kubectl apply -f custom-values.yaml --validate=false --namespace monitoring
-
+        helm ls --namespace monitoring | grep prometheus && \
+        helm upgrade prometheus prometheus-community/prometheus --namespace monitoring -f custom-values.yaml || \
+        helm install prometheus prometheus-community/prometheus --namespace monitoring -f custom-values.yaml
 
     - name: Get Grafana credentials and URL
       run: |
