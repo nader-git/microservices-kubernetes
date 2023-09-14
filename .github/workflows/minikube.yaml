@@ -77,15 +77,18 @@ jobs:
       run: |
         curl $SERVICE_URL
 
-    - name: Install Prometheus
-      run: |
+    - name: Install Grafana
+      run: | 
         kubectl create namespace monitoring
         sleep 10
+        helm install grafana grafana/grafana --namespace monitoring
+
+
+    - name: Install Prometheus
+      run: |
+
         helm install prometheus prometheus-community/prometheus --version 2.45.0 --namespace monitoring
 
-    - name: Install Grafana
-      run: |
-        helm install grafana grafana/grafana --namespace monitoring
 
     - name: Setup Prometheus Monitoring for FastAPI
       run: |
