@@ -89,7 +89,7 @@ jobs:
 
     - name: Setup Prometheus Monitoring for FastAPI
       run: |
-        helm upgrade prometheus prometheus-community/prometheus -f custom-values.yml
+        helm upgrade prometheus prometheus-community/prometheus -f custom-values.yaml
 
 
     - name: Get Grafana credentials and URL
