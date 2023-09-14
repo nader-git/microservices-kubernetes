@@ -91,6 +91,7 @@ jobs:
 
     - name: Get Grafana credentials and URL
       run: |
+        sleep 30
         GRAFANA_POD=$(kubectl get pods --namespace monitoring -l "app=grafana" -o jsonpath="{.items[0].metadata.name}")
         GRAFANA_PASSWORD=$(kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode)
         echo "Grafana URL: http://$GRAFANA_POD:3000"
