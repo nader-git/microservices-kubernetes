@@ -81,7 +81,7 @@ jobs:
       run: |
         kubectl create namespace monitoring
         sleep 10
-        helm install prometheus prometheus-community/prometheus --namespace monitoring
+        helm install prometheus prometheus-community/prometheus --version 2.45.0 --namespace monitoring
 
     - name: Install Grafana
       run: |
