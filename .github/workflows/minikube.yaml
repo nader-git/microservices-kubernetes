@@ -83,19 +83,14 @@ jobs:
         sleep 10
         helm install grafana grafana/grafana --namespace monitoring
 
-
     - name: Install Prometheus
       run: |
-
-        helm repo add bitnami https://charts.bitnami.com/bitnami
-        helm repo update
-        helm install prometheus bitnami/prometheus --namespace monitoring
-
-
+        helm install prometheus prometheus-community/prometheus --namespace monitoring
 
     - name: Setup Prometheus Monitoring for FastAPI
       run: |
-        kubectl apply -f custom-values.yaml
+        helm upgrade prometheus prometheus-community/prometheus -f custom-values.yml
+
 
     - name: Get Grafana credentials and URL
       run: |
