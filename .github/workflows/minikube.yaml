@@ -25,9 +25,15 @@ jobs:
 
     - name: Install Helm
       run: |
-        curl -LO "https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz"
-        tar -zxvf helm-v3.5.2-linux-amd64.tar.gz
+        curl -LO "https://get.helm.sh/helm-v3.12.0-linux-amd64.tar.gz"
+        tar -zxvf helm-v3.12.0-linux-amd64.tar.gz
         sudo mv linux-amd64/helm /usr/local/bin/helm        
+
+    - name: Add and Update Helm Repos
+      run: |
+        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        helm repo add grafana https://grafana.github.io/helm-charts
+        helm repo update
 
     - name: Build image
       run: |
@@ -49,11 +55,16 @@ jobs:
         helm install first-deploy ./helm-charts/
         sleep 20
 
-    - name: Retrieve Minikube IP and test service
+    - name: Expose service using Ingres
       run: |
         MINIKUBE_IP=$(minikube ip)
         curl -H "Host: first-deploy.com" $MINIKUBE_IP
 
+    - name: Expose service using Minikube
+      id: expose_service
+      run: |
+        SERVICE_URL=$(minikube service first-deploy-helm-charts --url)
+        echo "SERVICE_URL=$SERVICE_URL" >> $GITHUB_ENV
 
     - name: Check deployment status
       run: |
@@ -62,20 +73,38 @@ jobs:
         kubectl get deployment
         minikube ip
         
-    - name: Expose service using Minikube
-      id: expose_service
-      run: |
-        SERVICE_URL=$(minikube service first-deploy-helm-charts --url)
-        echo "SERVICE_URL=$SERVICE_URL" >> $GITHUB_ENV
-
     - name: Test the service with curl
       run: |
         curl $SERVICE_URL
 
+    - name: Install Grafana
+      run: | 
+        kubectl create namespace monitoring
+        sleep 10
+        helm install grafana grafana/grafana --namespace monitoring
 
-    - name: sleep for service
+    - name: Install or Upgrade Prometheus
       run: |
-        sleep 120
+        helm ls --namespace monitoring | grep prometheus && \
+        helm upgrade prometheus prometheus-community/prometheus --namespace monitoring -f custom-values.yaml || \
+        helm install prometheus prometheus-community/prometheus --namespace monitoring -f custom-values.yaml
+
+    - name: Get Grafana credentials and URL
+      run: |
+        end=$((SECONDS+120))
+        while [ $SECONDS -lt $end ]; do
+          GRAFANA_POD=$(kubectl get pods --namespace monitoring -l "app=grafana" -o jsonpath="{.items[0].metadata.name}" || echo "")
+          if [[ -n "$GRAFANA_POD" ]]; then
+            echo "Grafana pod found: $GRAFANA_POD"
+            echo "GRAFANA_POD=$GRAFANA_POD" >> $GITHUB_ENV
+            break
+          fi
+          sleep 5
+        done
+        
+        GRAFANA_PASSWORD=$(kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode)
+        echo "Grafana URL: http://$GRAFANA_POD:3000"
+        echo "Grafana Password: $GRAFANA_PASSWORD"
 
     - name: Final Cleanup
       if: always()
