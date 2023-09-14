@@ -89,7 +89,7 @@ jobs:
 
     - name: Setup Prometheus Monitoring for FastAPI
       run: |
-        kubectl apply -f custom-values.yaml
+        kubectl apply -f custom-values.yaml --validate=false --namespace monitoring
 
 
     - name: Get Grafana credentials and URL
