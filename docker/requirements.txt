@@ -2,3 +2,8 @@ fastapi==0.95.1
 uvicorn[standard]==0.22.0
 prometheus-fastapi-instrumentator==6.1.0
 prometheus_client==0.16.0
+azure-cosmos==4.2.0  # You can specify the version you want
+azure-mgmt-billing==6.0.0
+azure-mgmt-subscription==1.1.0
+azure-identity==1.7.1
+python-decouple==3.8

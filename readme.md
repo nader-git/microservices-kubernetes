@@ -10,3 +10,5 @@ To Do List:
 9. get docker working with minikube change values.yaml with fastapi image also keep the mount and also change the copy in fastapi to the mount and use minikube docker env to build once then i am fine and can potentially have the endpoint working
 10. get use case but try jenkins(for use case find decent use case for fastapi then use helm to show pros of automation)
 11. inventory or summin fastapi and we can add a path which will increment each time inventory or whatever is changed. 
+12. azure create a kubernetes cluster usin helm and do all the stufff we did before look at existing final project stuff and then mutlicklud stuff to help with docker
+13.
