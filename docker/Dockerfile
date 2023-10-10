@@ -8,8 +8,8 @@ RUN for i in {1..15}; do apt-get update && apt-get install -y python3 python3-pi
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* 
 
-COPY ./main.py /
-COPY ./requirements.txt /
+COPY ./docker/main.py /
+COPY ./docker/requirements.txt /
 RUN python3 -m pip install -r requirements.txt
 
 CMD ["uvicorn", "--host=0.0.0.0", "--port=80", "main:app"]
