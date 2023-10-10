@@ -2,3 +2,5 @@ fastapi==0.95.1
 uvicorn[standard]==0.22.0
 prometheus-fastapi-instrumentator==6.1.0
 prometheus_client==0.16.0
+azure-cosmos==4.2.0 
+
