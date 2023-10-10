@@ -11,4 +11,3 @@ To Do List:
 10. get use case but try jenkins(for use case find decent use case for fastapi then use helm to show pros of automation)
 11. inventory or summin fastapi and we can add a path which will increment each time inventory or whatever is changed. 
 12. azure create a kubernetes cluster usin helm and do all the stufff we did before look at existing final project stuff and then mutlicklud stuff to help with docker
-13.
